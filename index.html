@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Centered Google Charts</title>
+    <style>
+      body {
+        height: 100%;
+      }
+      .chart-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        text-align: center;
+      }
+      #bar_chart {
+        width: 900px;
+        height: 500px;
+      }
+      button {
+        background-color: #4CAF50;
+        border: none; 
+        color: white; 
+        padding: 15px 32px; 
+        text-align: center; 
+        display: inline-block; 
+        font-size: 16px; 
+        margin: 4px 2px; 
+        cursor: pointer; 
+        border-radius: 8px; 
+        transition-duration: 0.4s; 
+      }
+
+      button:hover {
+        background-color: #45a049; 
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+      }
+      h1 {
+        margin-top: 5rem;
+      }
+
+    </style>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawChart);
+
+      var data, options, chart, action;
+
+      function drawChart() {
+        // Create the original data table.
+        data = google.visualization.arrayToDataTable([
+          ['Element', 'Density', { role: 'style' }],
+          ['Copper', 8.94, '#b87333'],
+          ['Silver', 10.49, '#C0C0C0'],
+          ['Gold', 19.30, '#FFD700'],
+          ['Platinum', 21.45, 'color: #e5e4e2']
+        ]);
+
+        // Set chart options
+        options = {
+          title: "Density of Precious Metals, in g/cm^3",
+          bar: {groupWidth: "95%"},
+          legend: { position: "none" },
+        };
+
+        // Instantiate and draw our chart
+        chart = new google.visualization.BarChart(document.getElementById('bar_chart'));
+        chart.draw(data, options);
+      }
+
+      function addValues() {
+        // Add a new rows of data
+        data.addRow(['Palladium', 12, 'color: #B1B1B1']);
+        data.addRow(['Rhodium', 12.45, 'color: #E2E7E1']);
+        // Redraw the chart
+        chart.draw(data, options);
+        updateButtonToRemove();
+      }
+
+      function RemoveValues() {
+        // Remove new rows of data
+        data.removeRow(data.getNumberOfRows() - 1);
+        data.removeRow(data.getNumberOfRows() - 1);
+        // Redraw the chart
+        chart.draw(data, options);
+        action = !action
+        updateButtonToAdd();
+      }
+
+      function updateButtonToRemove() {
+        var button = document.getElementById('toggleButton');
+        button.innerHTML = 'Remove Last Value';
+        button.onclick = RemoveValues;
+      }
+
+      function updateButtonToAdd() {
+        var button = document.getElementById('toggleButton');
+        button.innerHTML = 'Add New Value';
+        button.onclick = addValues;
+      }
+
+    </script>
+  </head>
+  <body>
+    <div class="chart-container">
+      <h1>Metals</h1>
+      <div id="bar_chart"></div>
+      <button id="toggleButton" onclick="addValues()">Add New Value</button>
+    </div>
+  </body>
+</html>
